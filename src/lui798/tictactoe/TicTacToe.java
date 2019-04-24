@@ -1,10 +1,11 @@
 package lui798.tictactoe;
 
-import java.util.Random;
-
 public class TicTacToe {
 
     private Board gameboard = new Board();
+    private static final String PLAYER_MARK = "X";
+    private static final String CPU_MARK = "X";
+    private static CPU cpu = new CPU();
 
     public boolean playerTurn(int val) {
         //return if val is invalid
@@ -21,37 +22,79 @@ public class TicTacToe {
         }
         else {
             //mark spot if it hasn't been filled
-            gameboard.markBoard(row, col, "X");
+            gameboard.markBoard(row, col, PLAYER_MARK);
         }
         return true;
     }
 
     public void cpuTurn() {
-        Random rand = new Random();
-        int val = rand.nextInt(8);
+        cpu.randomNum();
 
+        int val = cpu.getNum();
         int row = val / 3;
         int col = val % 3;
 
         while (!gameboard.getMark(row, col).equals("•")) {
-            val = rand.nextInt(8);
+            cpu.randomNum();
+
+            val = cpu.getNum();
             row = val / 3;
             col = val % 3;
         }
 
-        gameboard.markBoard(row, col, "O");
+        gameboard.markBoard(row, col, CPU_MARK);
     }
 
-    public boolean threeInARow(int val) {
+    public boolean cpuThreeInARow() {
+        return threeInARow(cpu.getNum(), false);
+    }
+
+    public boolean threeInARow(int val, boolean isPlayer) {
         String[][] boardArray = gameboard.getBoard();
-        int col, row, diag, rdiag = 0;
-        boolean win = false;
+        int col = 0, row = 0, diag = 0, rdiag = 0;
+        val--;
         int x = val / 3;
         int y = val % 3;
+        int n = gameboard.getSize();
 
-        for (int i = 0; i < gameboard.getSize(); i++) {
-            if (boardArray[])
+        if (isPlayer) {
+            for (int i = 0; i < n; i++) {
+                if (boardArray[x][i] == PLAYER_MARK) col++;
+                if (boardArray[i][y] == PLAYER_MARK) row++;
+                if (boardArray[i][i] == PLAYER_MARK) diag++;
+                if (boardArray[i][n-i-1] == PLAYER_MARK) rdiag++;
+            }
         }
+        else {
+            for (int i = 0; i < n; i++) {
+                if (boardArray[x][i] == CPU_MARK) col++;
+                if (boardArray[i][y] == CPU_MARK) row++;
+                if (boardArray[i][i] == CPU_MARK) diag++;
+                if (boardArray[i][n-i-1] == CPU_MARK) rdiag++;
+            }
+        }
+
+
+        if (row == n || col == n || diag == n || rdiag == n)
+            return true;
+        return false;
+    }
+
+    public boolean boardFilled() {
+        String[][] boardArray = gameboard.getBoard();
+        int num = 0;
+        int size = gameboard.getSize();
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (!boardArray[i][j].equals("•")) num++;
+            }
+        }
+
+        if (num == size * size) {
+            return true;
+        }
+        return false;
     }
 
     public String toString() {
