@@ -1,11 +1,14 @@
 package lui798.tictactoe;
 
+import java.util.ArrayList;
+
 public class TicTacToe {
 
     private Board gameboard = new Board();
     private static final String PLAYER_MARK = "X";
-    private static final String CPU_MARK = "X";
+    private static final String CPU_MARK = "O";
     private static CPU cpu = new CPU();
+    private static int winState = 0;
 
     public boolean playerTurn(int val) {
         //return if val is invalid
@@ -28,16 +31,26 @@ public class TicTacToe {
     }
 
     public void cpuTurn() {
-        cpu.randomNum();
+        int col = 0, row = 0, val = 0;
 
-        int val = cpu.getNum();
-        int row = val / 3;
-        int col = val % 3;
-
-        while (!gameboard.getMark(row, col).equals("•")) {
+        if (cpu.getMarksOnBoard() < 1) {
             cpu.randomNum();
 
             val = cpu.getNum();
+            row = val / 3;
+            col = val % 3;
+
+            while (!gameboard.getMark(row, col).equals("•")) {
+                cpu.randomNum();
+
+                val = cpu.getNum();
+                row = val / 3;
+                col = val % 3;
+            }
+            cpu.setMarksOnBoard();
+        }
+        else {
+            val = cpuDecide();
             row = val / 3;
             col = val % 3;
         }
@@ -45,8 +58,33 @@ public class TicTacToe {
         gameboard.markBoard(row, col, CPU_MARK);
     }
 
+    private int cpuDecide() {
+        String[][] boardArray = gameboard.getBoard();
+        int s = gameboard.getSize();
+        int x = 0, y = 0;
+        ArrayList<String> options = new ArrayList<String>();
+
+        for (int i = 0; i < s; i++) {
+            if (boardArray[i][0] == PLAYER_MARK && boardArray[i][1] == PLAYER_MARK) {
+                options.add(Integer.toString(i) + Integer.toString(2));
+            }
+            if (boardArray[i][1] == PLAYER_MARK && boardArray[i][2] == PLAYER_MARK) {
+                options.add(Integer.toString(i) + Integer.toString(0));
+            }
+            if (boardArray[i][0] == PLAYER_MARK && boardArray[i][2] == PLAYER_MARK) {
+                options.add(Integer.toString(i) + Integer.toString(1));
+            }
+        }
+        
+        return 8;
+    }
+
+    private int coordsToInt(int x, int y) {
+        return x * 3 + y + 1;
+    }
+
     public boolean cpuThreeInARow() {
-        return threeInARow(cpu.getNum(), false);
+        return threeInARow(cpu.getNum() + 1, false);
     }
 
     public boolean threeInARow(int val, boolean isPlayer) {
@@ -95,6 +133,14 @@ public class TicTacToe {
             return true;
         }
         return false;
+    }
+
+    public void setWinState(int winState) {
+        this.winState = winState;
+    }
+
+    public int getWinState() {
+        return winState;
     }
 
     public String toString() {
