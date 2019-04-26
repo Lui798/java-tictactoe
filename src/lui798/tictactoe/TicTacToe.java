@@ -1,6 +1,7 @@
 package lui798.tictactoe;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class TicTacToe {
 
@@ -33,7 +34,9 @@ public class TicTacToe {
     public void cpuTurn() {
         int col = 0, row = 0, val = 0;
 
-        if (cpu.getMarksOnBoard() < 1) {
+        val = cpuDecide();
+
+        if (val < 0) {
             cpu.randomNum();
 
             val = cpu.getNum();
@@ -49,8 +52,8 @@ public class TicTacToe {
             }
             cpu.setMarksOnBoard();
         }
+
         else {
-            val = cpuDecide();
             row = val / 3;
             col = val % 3;
         }
@@ -61,7 +64,8 @@ public class TicTacToe {
     private int cpuDecide() {
         String[][] boardArray = gameboard.getBoard();
         int s = gameboard.getSize();
-        int x = 0, y = 0;
+        int x = 0, y = 0, n = 0;
+        Random rand = new Random();
         ArrayList<String> options = new ArrayList<String>();
 
         for (int i = 0; i < s; i++) {
@@ -75,8 +79,27 @@ public class TicTacToe {
                 options.add(Integer.toString(i) + Integer.toString(1));
             }
         }
-        
-        return 8;
+        for (int i = 0; i < s; i++) {
+            if (boardArray[0][i] == PLAYER_MARK && boardArray[1][i] == PLAYER_MARK) {
+                options.add(Integer.toString(2) + Integer.toString(i));
+            }
+            if (boardArray[1][i] == PLAYER_MARK && boardArray[2][i] == PLAYER_MARK) {
+                options.add(Integer.toString(0) + Integer.toString(i));
+            }
+            if (boardArray[0][i] == PLAYER_MARK && boardArray[2][i] == PLAYER_MARK) {
+                options.add(Integer.toString(1) + Integer.toString(i));
+            }
+        }
+        System.out.println("S:" + (options.size()));
+        if (options.size() < 1) return -1;
+
+        n = rand.nextInt(options.size());
+        x = Integer.parseInt(options.get(n).substring(0, 1));
+        y = Integer.parseInt(options.get(n).substring(1));
+
+        if (!gameboard.getMark(x, y).equals("•")) return -1;
+        System.out.println("X:" + x + " Y:" + y + " N:" + n);
+        return coordsToInt(x, y) - 1;
     }
 
     private int coordsToInt(int x, int y) {

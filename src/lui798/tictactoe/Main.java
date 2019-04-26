@@ -46,7 +46,7 @@ public class Main {
     }
 
     public static void youWin() {
-        JOptionPane.showMessageDialog(null, game.toString() + "\nYou got three in a row!");
+        JOptionPane.showMessageDialog(null, game.toString() + "\nYou win, you got three in a row!");
         game.setWinState(1);
     }
 
