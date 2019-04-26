@@ -11,17 +11,28 @@ public class Main {
         JOptionPane.showMessageDialog(null, "Welcome to Tic Tac Toe! You can mark a spot by\n" +
                 "entering a 1-9. You will be X and the CPU will be O.");
 
-        while (!game.boardFilled() && game.getWinState() == 0) {
+        while (!game.boardFilled()) {
             playerTurn();
             if (game.threeInARow(playerInput, true)) {
-                youWin();
+                game.setWinState(1);
                 break;
             }
-            if (game.cpuThreeInARow()) {
-                youLose();
-                break;
-            }
+            if (game.boardFilled()) break;
             cpuTurn();
+            if (game.cpuThreeInARow()) {
+                game.setWinState(2);
+                break;
+            }
+        }
+
+        if (game.getWinState() == 1) {
+            youWin();
+        }
+        else if (game.getWinState() == 2) {
+            youLose();
+        }
+        else if (game.getWinState() == 0) {
+            draw();
         }
     }
 
@@ -47,11 +58,14 @@ public class Main {
 
     public static void youWin() {
         JOptionPane.showMessageDialog(null, game.toString() + "\nYou win, you got three in a row!");
-        game.setWinState(1);
     }
 
     public static void youLose() {
         JOptionPane.showMessageDialog(null, game.toString() + "\nYou lost, the cpu got three in a row.");
-        game.setWinState(2);
+    }
+
+    public static void draw() {
+        JOptionPane.showMessageDialog(null, game.toString() + "\nIts a draw, the board is filed " +
+                "\nwith no winners.");
     }
 }

@@ -8,12 +8,13 @@ public class TicTacToe {
     private Board gameboard = new Board();
     private static final String PLAYER_MARK = "X";
     private static final String CPU_MARK = "O";
+    private static final String EMPTY_MARK = "•";
     private static CPU cpu = new CPU();
     private static int winState = 0;
 
     public boolean playerTurn(int val) {
         //return if val is invalid
-        if (val > 9 || val < 0) return false;
+        if (val > 9 || val < 1) return false;
         //Reduce value by 1 for use with array index of 0
         val--;
         //convert number into rows and columns for 2d array
@@ -21,7 +22,7 @@ public class TicTacToe {
         int col = val % 3;
 
         //return false if spot has already been marked
-        if (!gameboard.getMark(row, col).equals("•")) {
+        if (!gameboard.getMark(row, col).equals(EMPTY_MARK)) {
             return false;
         }
         else {
@@ -36,6 +37,7 @@ public class TicTacToe {
 
         val = cpuDecide();
 
+        //if cpuDecide returns -1 generate random position
         if (val < 0) {
             cpu.randomNum();
 
@@ -43,16 +45,14 @@ public class TicTacToe {
             row = val / 3;
             col = val % 3;
 
-            while (!gameboard.getMark(row, col).equals("•")) {
+            while (!gameboard.getMark(row, col).equals(EMPTY_MARK)) {
                 cpu.randomNum();
 
                 val = cpu.getNum();
                 row = val / 3;
                 col = val % 3;
             }
-            cpu.setMarksOnBoard();
         }
-
         else {
             row = val / 3;
             col = val % 3;
@@ -66,39 +66,41 @@ public class TicTacToe {
         int s = gameboard.getSize();
         int x = 0, y = 0, n = 0;
         Random rand = new Random();
+        //List of places the cpu can place a mark
         ArrayList<String> options = new ArrayList<String>();
 
+        //Check if there are two player or cpu marks in a row then add that to list
         for (int i = 0; i < s; i++) {
-            if (boardArray[i][0] == PLAYER_MARK && boardArray[i][1] == PLAYER_MARK) {
+            if (boardArray[i][0] == PLAYER_MARK && boardArray[i][1] == PLAYER_MARK
+                    || boardArray[i][0] == CPU_MARK && boardArray[i][1] == CPU_MARK)
                 options.add(Integer.toString(i) + Integer.toString(2));
-            }
-            if (boardArray[i][1] == PLAYER_MARK && boardArray[i][2] == PLAYER_MARK) {
+            if (boardArray[i][1] == PLAYER_MARK && boardArray[i][2] == PLAYER_MARK
+                    || boardArray[i][1] == CPU_MARK && boardArray[i][2] == CPU_MARK)
                 options.add(Integer.toString(i) + Integer.toString(0));
-            }
-            if (boardArray[i][0] == PLAYER_MARK && boardArray[i][2] == PLAYER_MARK) {
+            if (boardArray[i][0] == PLAYER_MARK && boardArray[i][2] == PLAYER_MARK
+                    || boardArray[i][0] == CPU_MARK && boardArray[i][2] == CPU_MARK)
                 options.add(Integer.toString(i) + Integer.toString(1));
-            }
         }
+        //Check if there are two player or cpu marks in a column then add that to list
         for (int i = 0; i < s; i++) {
-            if (boardArray[0][i] == PLAYER_MARK && boardArray[1][i] == PLAYER_MARK) {
+            if (boardArray[0][i] == PLAYER_MARK && boardArray[1][i] == PLAYER_MARK
+                    || boardArray[0][i] == CPU_MARK && boardArray[1][i] == CPU_MARK)
                 options.add(Integer.toString(2) + Integer.toString(i));
-            }
-            if (boardArray[1][i] == PLAYER_MARK && boardArray[2][i] == PLAYER_MARK) {
+            if (boardArray[1][i] == PLAYER_MARK && boardArray[2][i] == PLAYER_MARK
+                    || boardArray[1][i] == CPU_MARK && boardArray[2][i] == CPU_MARK)
                 options.add(Integer.toString(0) + Integer.toString(i));
-            }
-            if (boardArray[0][i] == PLAYER_MARK && boardArray[2][i] == PLAYER_MARK) {
+            if (boardArray[0][i] == PLAYER_MARK && boardArray[2][i] == PLAYER_MARK
+                    || boardArray[0][i] == CPU_MARK && boardArray[2][i] == CPU_MARK)
                 options.add(Integer.toString(1) + Integer.toString(i));
-            }
         }
-        System.out.println("S:" + (options.size()));
+
         if (options.size() < 1) return -1;
 
         n = rand.nextInt(options.size());
         x = Integer.parseInt(options.get(n).substring(0, 1));
         y = Integer.parseInt(options.get(n).substring(1));
 
-        if (!gameboard.getMark(x, y).equals("•")) return -1;
-        System.out.println("X:" + x + " Y:" + y + " N:" + n);
+        if (!gameboard.getMark(x, y).equals(EMPTY_MARK)) return -1;
         return coordsToInt(x, y) - 1;
     }
 
@@ -148,7 +150,7 @@ public class TicTacToe {
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (!boardArray[i][j].equals("•")) num++;
+                if (!boardArray[i][j].equals(EMPTY_MARK)) num++;
             }
         }
 
