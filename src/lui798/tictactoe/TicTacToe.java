@@ -5,12 +5,18 @@ import java.util.Random;
 
 public class TicTacToe {
 
-    private Board gameboard = new Board();
     private static final String PLAYER_MARK = "X";
     private static final String CPU_MARK = "O";
     private static final String EMPTY_MARK = "•";
-    private static CPU cpu = new CPU();
-    private static int winState = 0;
+    private Board gameboard;
+    private static CPU cpu;
+    private static int winState;
+
+    public TicTacToe() {
+        gameboard = new Board();
+        cpu = new CPU();
+        winState = 0;
+    }
 
     public boolean playerTurn(int val) {
         //return if val is invalid

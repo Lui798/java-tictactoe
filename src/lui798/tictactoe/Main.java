@@ -34,6 +34,8 @@ public class Main {
         else if (game.getWinState() == 0) {
             draw();
         }
+
+        playAgain();
     }
 
     public static void playerTurn() {
@@ -67,5 +69,14 @@ public class Main {
     public static void draw() {
         JOptionPane.showMessageDialog(null, game.toString() + "\nIts a draw, the board is filed " +
                 "\nwith no winners.");
+    }
+
+    public static void playAgain() {
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Play again?",
+                "Game Over", JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            game = new TicTacToe();
+            main(new String[0]);
+        }
     }
 }
