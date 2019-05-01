@@ -10,7 +10,8 @@ public class Main {
 
     public static void main(String[] args) {
         JOptionPane.showMessageDialog(null, "Welcome to Tic Tac Toe! You can mark a spot by\n" +
-                "entering a 1-9. You will be X and the CPU will be O.");
+                "entering a 1-9. You will be X and the CPU will be O.\n\nWins: " + scores.getWins() +
+                "\nLosses: " + scores.getLosses() + "\nTies: " + scores.getTies());
 
         while (!game.boardFilled()) {
             playerTurn();
@@ -28,12 +29,15 @@ public class Main {
 
         if (game.getWinState() == 1) {
             youWin();
+            scores.addWin();
         }
         else if (game.getWinState() == 2) {
             youLose();
+            scores.addLoss();
         }
         else if (game.getWinState() == 0) {
             draw();
+            scores.addTie();
         }
 
         playAgain();

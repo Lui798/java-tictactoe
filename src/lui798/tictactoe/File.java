@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class File {
@@ -14,10 +15,14 @@ public class File {
 
     public File(String file) {
         this.file = Paths.get(file);
-        List<String> initLines = new ArrayList<String>();
-        writeFile(this.file, L);
-        addScore(0, LOSS_INDEX);
-        addScore(0, TIE_INDEX);
+        List<String> lines = readFile(this.file);
+        if (lines.size() < 1) {
+            initFile();
+        }
+    }
+
+    public void initFile() {
+        writeFile(this.file, Arrays.asList("0", "0", "0"));
     }
 
     public void addWin() {
@@ -38,7 +43,22 @@ public class File {
         addScore(score, TIE_INDEX);
     }
 
-    public int getScore(int index) {
+    public String getWins() {
+        List<String> lines = readFile(file);
+        return lines.get(WIN_INDEX);
+    }
+
+    public String getLosses() {
+        List<String> lines = readFile(file);
+        return lines.get(LOSS_INDEX);
+    }
+
+    public String getTies() {
+        List<String> lines = readFile(file);
+        return lines.get(TIE_INDEX);
+    }
+
+    private int getScore(int index) {
         List<String> lines = readFile(file);
         return parseInt(lines.get(index));
     }
