@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class Main {
 
-    public static File scores = new File("scores.txt");
+    public static Scores scores = new Scores("scores.txt");
     public static TicTacToe game = new TicTacToe();
     public static int playerInput;
 
