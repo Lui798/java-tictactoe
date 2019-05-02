@@ -1,5 +1,8 @@
 package lui798.tictactoe;
 
+import lui798.tictactoe.game.Scores;
+import lui798.tictactoe.game.TicTacToe;
+
 import javax.swing.*;
 
 public class Main {

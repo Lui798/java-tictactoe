@@ -1,4 +1,4 @@
-package lui798.tictactoe;
+package lui798.tictactoe.game;
 
 import java.util.Random;
 

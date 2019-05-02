@@ -1,4 +1,4 @@
-package lui798.tictactoe;
+package lui798.tictactoe.util;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

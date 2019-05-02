@@ -1,19 +1,21 @@
-package lui798.tictactoe;
+package lui798.tictactoe.game;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import static lui798.tictactoe.util.Convert.*;
 
 public class TicTacToe {
 
     private static final String PLAYER_MARK = "X";
     private static final String CPU_MARK = "O";
     private static final String EMPTY_MARK = "•";
-    private Board gameboard;
+    private Board board;
     private static CPU cpu;
     private static int winState;
 
     public TicTacToe() {
-        gameboard = new Board();
+        board = new Board();
         cpu = new CPU();
         winState = 0;
     }
@@ -28,12 +30,12 @@ public class TicTacToe {
         int col = val % 3;
 
         //return false if spot has already been marked
-        if (!gameboard.getMark(row, col).equals(EMPTY_MARK)) {
+        if (!board.getMark(row, col).equals(EMPTY_MARK)) {
             return false;
         }
         else {
             //mark spot if it hasn't been filled
-            gameboard.markBoard(row, col, PLAYER_MARK);
+            board.markBoard(row, col, PLAYER_MARK);
         }
         return true;
     }
@@ -51,7 +53,7 @@ public class TicTacToe {
             row = val / 3;
             col = val % 3;
 
-            while (!gameboard.getMark(row, col).equals(EMPTY_MARK)) {
+            while (!board.getMark(row, col).equals(EMPTY_MARK)) {
                 cpu.randomNum();
 
                 val = cpu.getNum();
@@ -64,12 +66,12 @@ public class TicTacToe {
             col = val % 3;
         }
 
-        gameboard.markBoard(row, col, CPU_MARK);
+        board.markBoard(row, col, CPU_MARK);
     }
 
     private int cpuDecide() {
-        String[][] boardArray = gameboard.getBoard();
-        int s = gameboard.getSize();
+        String[][] boardArray = board.getBoard();
+        int s = board.getSize();
         int x = 0, y = 0, n = 0;
         Random rand = new Random();
         //List of places the cpu can place a mark
@@ -100,13 +102,23 @@ public class TicTacToe {
                 options.add(Integer.toString(1) + Integer.toString(i));
         }
 
+        if (board.checkForMatch(0, 0, 1, 1, PLAYER_MARK)
+                || board.checkForMatch(0, 0, 1, 1, CPU_MARK))
+            options.add(parseInt(2) + parseInt(2));
+        if (board.checkForMatch(1, 1, 2, 2, PLAYER_MARK)
+                || board.checkForMatch(1, 1, 2, 2, PLAYER_MARK))
+            options.add(parseInt(0) + parseInt(0));
+        if (board.checkForMatch(0, 0, 2, 2, PLAYER_MARK)
+                || board.checkForMatch(0, 0, 2, 2, CPU_MARK))
+            options.add(parseInt(1) + parseInt(1));
+
         if (options.size() < 1) return -1;
 
         n = rand.nextInt(options.size());
         x = Integer.parseInt(options.get(n).substring(0, 1));
         y = Integer.parseInt(options.get(n).substring(1));
 
-        if (!gameboard.getMark(x, y).equals(EMPTY_MARK)) return -1;
+        if (!board.getMark(x, y).equals(EMPTY_MARK)) return -1;
         return coordsToInt(x, y) - 1;
     }
 
@@ -119,12 +131,12 @@ public class TicTacToe {
     }
 
     public boolean threeInARow(int val, boolean isPlayer) {
-        String[][] boardArray = gameboard.getBoard();
+        String[][] boardArray = board.getBoard();
         int col = 0, row = 0, diag = 0, rdiag = 0;
         val--;
         int x = val / 3;
         int y = val % 3;
-        int n = gameboard.getSize();
+        int n = board.getSize();
 
         if (isPlayer) {
             for (int i = 0; i < n; i++) {
@@ -150,9 +162,9 @@ public class TicTacToe {
     }
 
     public boolean boardFilled() {
-        String[][] boardArray = gameboard.getBoard();
+        String[][] boardArray = board.getBoard();
         int num = 0;
-        int size = gameboard.getSize();
+        int size = board.getSize();
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -175,11 +187,11 @@ public class TicTacToe {
     }
 
     public String toString() {
-        String[][] boardArray = gameboard.getBoard();
+        String[][] boardArray = board.getBoard();
         String stringBoard = "";
 
-        for (int i = 0; i < gameboard.getSize(); i++) {
-            for (int j = 0; j < gameboard.getSize(); j++) {
+        for (int i = 0; i < board.getSize(); i++) {
+            for (int j = 0; j < board.getSize(); j++) {
                 stringBoard += boardArray[i][j] + "  ";
             }
             stringBoard += "\n";

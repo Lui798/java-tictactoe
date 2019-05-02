@@ -1,4 +1,4 @@
-package lui798.tictactoe;
+package lui798.tictactoe.game;
 
 public class Board {
 
@@ -9,7 +9,7 @@ public class Board {
         this.initBoard();
     }
 
-    public void initBoard() {
+    private void initBoard() {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 markBoard(i, j, "•");
@@ -19,6 +19,11 @@ public class Board {
 
     public void markBoard(int row, int col, String mark) {
         board[row][col] = mark;
+    }
+
+    public boolean checkForMatch(int x1, int y1, int x2, int y2, String mark) {
+        if (board[x1][y1] == mark && board[x2][y2] == mark) return true;
+        else return false;
     }
 
     public String getMark(int row, int col) {

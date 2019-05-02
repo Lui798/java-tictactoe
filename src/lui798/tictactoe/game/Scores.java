@@ -1,9 +1,13 @@
-package lui798.tictactoe;
+package lui798.tictactoe.game;
+
+import lui798.tictactoe.util.File;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+
+import static lui798.tictactoe.util.Convert.*;
 
 public class Scores extends File {
     private Path file;
@@ -65,13 +69,5 @@ public class Scores extends File {
         List<String> lines = readFile(file);
         lines.set(index, parseInt(input));
         writeFile(file, lines);
-    }
-
-    private int parseInt(String s) {
-        return Integer.parseInt(s);
-    }
-
-    private String parseInt(int i) {
-        return Integer.toString(i);
     }
 }
