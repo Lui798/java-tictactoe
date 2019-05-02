@@ -43,6 +43,7 @@ public class TicTacToe {
     public void cpuTurn() {
         int col = 0, row = 0, val = 0;
 
+        //cpu makes smart decision and returns -1 if it cant
         val = cpuDecide();
 
         //if cpuDecide returns -1 generate random position
@@ -69,6 +70,7 @@ public class TicTacToe {
         board.markBoard(row, col, CPU_MARK);
     }
 
+    //cpu decides where to place a mark based on if the cpu or player can get three in a row
     private int cpuDecide() {
         String[][] boardArray = board.getBoard();
         int s = board.getSize();
@@ -79,34 +81,34 @@ public class TicTacToe {
 
         //Check if there are two player or cpu marks in a row then add that to list
         for (int i = 0; i < s; i++) {
-            if (boardArray[i][0] == PLAYER_MARK && boardArray[i][1] == PLAYER_MARK
-                    || boardArray[i][0] == CPU_MARK && boardArray[i][1] == CPU_MARK)
-                options.add(Integer.toString(i) + Integer.toString(2));
-            if (boardArray[i][1] == PLAYER_MARK && boardArray[i][2] == PLAYER_MARK
-                    || boardArray[i][1] == CPU_MARK && boardArray[i][2] == CPU_MARK)
-                options.add(Integer.toString(i) + Integer.toString(0));
-            if (boardArray[i][0] == PLAYER_MARK && boardArray[i][2] == PLAYER_MARK
-                    || boardArray[i][0] == CPU_MARK && boardArray[i][2] == CPU_MARK)
-                options.add(Integer.toString(i) + Integer.toString(1));
+            if (board.checkForMatch(i, 0, i, 1, PLAYER_MARK)
+                    || board.checkForMatch(i, 0, i, 1, CPU_MARK))
+                options.add(parseInt(i) + parseInt(2));
+            if (board.checkForMatch(i, 1, i, 2, PLAYER_MARK)
+                    || board.checkForMatch(i, 1, i, 2, CPU_MARK))
+                options.add(parseInt(i) + parseInt(0));
+            if (board.checkForMatch(i, 0, i, 2, PLAYER_MARK)
+                    || board.checkForMatch(i, 0, i, 2, CPU_MARK))
+                options.add(parseInt(i) + parseInt(1));
         }
         //Check if there are two player or cpu marks in a column then add that to list
         for (int i = 0; i < s; i++) {
-            if (boardArray[0][i] == PLAYER_MARK && boardArray[1][i] == PLAYER_MARK
-                    || boardArray[0][i] == CPU_MARK && boardArray[1][i] == CPU_MARK)
-                options.add(Integer.toString(2) + Integer.toString(i));
-            if (boardArray[1][i] == PLAYER_MARK && boardArray[2][i] == PLAYER_MARK
-                    || boardArray[1][i] == CPU_MARK && boardArray[2][i] == CPU_MARK)
-                options.add(Integer.toString(0) + Integer.toString(i));
-            if (boardArray[0][i] == PLAYER_MARK && boardArray[2][i] == PLAYER_MARK
-                    || boardArray[0][i] == CPU_MARK && boardArray[2][i] == CPU_MARK)
-                options.add(Integer.toString(1) + Integer.toString(i));
+            if (board.checkForMatch(0, i, 1, i, PLAYER_MARK)
+                    || board.checkForMatch(0, i, 1, i, CPU_MARK))
+                options.add(parseInt(2) + parseInt(i));
+            if (board.checkForMatch(1, i, 2, i, PLAYER_MARK)
+                    || board.checkForMatch(1, i, 2, i, CPU_MARK))
+                options.add(parseInt(0) + parseInt(i));
+            if (board.checkForMatch(0, i, 2, i, PLAYER_MARK)
+                    || board.checkForMatch(0, i, 2, i, CPU_MARK))
+                options.add(parseInt(1) + parseInt(i));
         }
-
+        //Check if there are two player or cpu marks in a diagonal then add that to list
         if (board.checkForMatch(0, 0, 1, 1, PLAYER_MARK)
                 || board.checkForMatch(0, 0, 1, 1, CPU_MARK))
             options.add(parseInt(2) + parseInt(2));
         if (board.checkForMatch(1, 1, 2, 2, PLAYER_MARK)
-                || board.checkForMatch(1, 1, 2, 2, PLAYER_MARK))
+                || board.checkForMatch(1, 1, 2, 2, CPU_MARK))
             options.add(parseInt(0) + parseInt(0));
         if (board.checkForMatch(0, 0, 2, 2, PLAYER_MARK)
                 || board.checkForMatch(0, 0, 2, 2, CPU_MARK))
@@ -122,6 +124,7 @@ public class TicTacToe {
         return coordsToInt(x, y) - 1;
     }
 
+    //Convert coords for board array into user-friendy number 1-9
     private int coordsToInt(int x, int y) {
         return x * 3 + y + 1;
     }
@@ -130,17 +133,19 @@ public class TicTacToe {
         return threeInARow(cpu.getNum() + 1, false);
     }
 
+    //Check for a win
     public boolean threeInARow(int val, boolean isPlayer) {
         String[][] boardArray = board.getBoard();
-        int col = 0, row = 0, diag = 0, rdiag = 0;
+        int col = 0, row = 0, diag = 0, rdiag = 0; //values here are added to based on how many marks are in the row, col, etc. that the given mark is in
         val--;
+        //Gets position in array of the last marked spot based on input
         int x = val / 3;
         int y = val % 3;
         int n = board.getSize();
 
         if (isPlayer) {
             for (int i = 0; i < n; i++) {
-                if (boardArray[x][i] == PLAYER_MARK) col++;
+                if (boardArray[x][i] == PLAYER_MARK) col++; //adds to col, row, etc. for every mark in a row
                 if (boardArray[i][y] == PLAYER_MARK) row++;
                 if (boardArray[i][i] == PLAYER_MARK) diag++;
                 if (boardArray[i][n-i-1] == PLAYER_MARK) rdiag++;
@@ -155,7 +160,7 @@ public class TicTacToe {
             }
         }
 
-
+        //if marks in row col, etc. equals there return true for three in a row
         if (row == n || col == n || diag == n || rdiag == n)
             return true;
         return false;

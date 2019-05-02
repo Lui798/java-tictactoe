@@ -30,6 +30,7 @@ public class Main {
             }
         }
 
+        //based on win state add score and display appropriate message
         if (game.getWinState() == 1) {
             youWin();
             scores.addWin();
