@@ -2,6 +2,7 @@ package lui798.tictactoe.game;
 
 import lui798.tictactoe.util.File;
 
+import javax.swing.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -20,6 +21,14 @@ public class Scores extends File {
         List<String> lines = readFile(this.file);
         if (lines.size() < 1) {
             initFile();
+        }
+        for (int i = 0; i < lines.size(); i++) {
+            try { parseInt(lines.get(i)); }
+            catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, e + "\nResetting scores file and exiting program, press OK to continue");
+                initFile();
+                System.exit(1);
+            }
         }
     }
 
@@ -46,18 +55,15 @@ public class Scores extends File {
     }
 
     public String getWins() {
-        List<String> lines = readFile(file);
-        return lines.get(WIN_INDEX);
+        return parseInt(getScore(WIN_INDEX));
     }
 
     public String getLosses() {
-        List<String> lines = readFile(file);
-        return lines.get(LOSS_INDEX);
+        return parseInt(getScore(LOSS_INDEX));
     }
 
     public String getTies() {
-        List<String> lines = readFile(file);
-        return lines.get(TIE_INDEX);
+        return parseInt(getScore(TIE_INDEX));
     }
 
     private int getScore(int index) {

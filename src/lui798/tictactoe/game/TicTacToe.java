@@ -197,7 +197,7 @@ public class TicTacToe {
 
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j < board.getSize(); j++) {
-                stringBoard += boardArray[i][j] + "  ";
+                stringBoard += boardArray[i][j] + "   ";
             }
             stringBoard += "\n";
         }

@@ -68,15 +68,15 @@ public class Main {
     }
 
     public static void youWin() {
-        JOptionPane.showMessageDialog(null, game.toString() + "\nYou win, you got three in a row!");
+        JOptionPane.showMessageDialog(null, game + "\nYou win, you got three in a row!");
     }
 
     public static void youLose() {
-        JOptionPane.showMessageDialog(null, game.toString() + "\nYou lost, the cpu got three in a row.");
+        JOptionPane.showMessageDialog(null, game + "\nYou lost, the cpu got three in a row.");
     }
 
     public static void draw() {
-        JOptionPane.showMessageDialog(null, game.toString() + "\nIts a draw, the board is filed " +
+        JOptionPane.showMessageDialog(null, game + "\nIts a draw, the board is filed " +
                 "\nwith no winners.");
     }
 
