@@ -3,25 +3,31 @@ package lui798.tictactoe.game;
 import lui798.tictactoe.util.File;
 
 import javax.swing.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
 import static lui798.tictactoe.util.Convert.*;
 
 public class Scores extends File {
-    private Path file;
     private final int TIE_INDEX = 2;
     private final int LOSS_INDEX = 1;
     private final int WIN_INDEX = 0;
 
     public Scores(String file) {
-        this.file = Paths.get(file);
-        List<String> lines = readFile(this.file);
+        super(file);
+        List<String> lines = readFile(getFile());
         if (lines.size() < 1) {
             initFile();
         }
+        checkCorruptFile();
+    }
+
+    private void initFile() {
+        writeFile(getFile(), Arrays.asList("0", "0", "0"));
+    }
+
+    private void checkCorruptFile() {
+        List<String> lines = readFile(getFile());
         for (int i = 0; i < lines.size(); i++) {
             try { parseInt(lines.get(i)); }
             catch (NumberFormatException e) {
@@ -30,10 +36,6 @@ public class Scores extends File {
                 System.exit(1);
             }
         }
-    }
-
-    private void initFile() {
-        writeFile(this.file, Arrays.asList("0", "0", "0"));
     }
 
     public void addWin() {
@@ -67,13 +69,13 @@ public class Scores extends File {
     }
 
     private int getScore(int index) {
-        List<String> lines = readFile(file);
+        List<String> lines = readFile(getFile());
         return parseInt(lines.get(index));
     }
 
     private void addScore(int input, int index) {
-        List<String> lines = readFile(file);
+        List<String> lines = readFile(getFile());
         lines.set(index, parseInt(input));
-        writeFile(file, lines);
+        writeFile(getFile(), lines);
     }
 }

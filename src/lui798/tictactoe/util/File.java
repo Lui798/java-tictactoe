@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class File {
@@ -16,7 +15,10 @@ public class File {
 
     public File(String file) {
         this.file = Paths.get(file);
-        writeFile(this.file, Arrays.asList("\n"));
+    }
+
+    public Path getFile() {
+        return file;
     }
 
     public List<String> readFile(Path file) {
