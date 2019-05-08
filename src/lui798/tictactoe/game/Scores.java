@@ -15,15 +15,19 @@ public class Scores extends File {
 
     public Scores(String file) {
         super(file);
-        List<String> lines = readFile(getFile());
-        if (lines.size() < 1) {
-            initFile();
-        }
+        fillEmptyFile();
         checkCorruptFile();
     }
 
     private void initFile() {
         writeFile(getFile(), Arrays.asList("0", "0", "0"));
+    }
+
+    private void fillEmptyFile() {
+        List<String> lines = readFile(getFile());
+        if (lines.size() < 1) {
+            initFile();
+        }
     }
 
     private void checkCorruptFile() {
